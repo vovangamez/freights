@@ -6,7 +6,7 @@ def query_with_fetchone():
         dbconfig = read_db_config()
         conn = MySQLConnection(**dbconfig)
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM trucks")
+        cursor.execute("SELECT TruckPhoto FROM trucks")
 
         row = cursor.fetchone()
 

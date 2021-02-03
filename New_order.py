@@ -4,7 +4,6 @@ from mysql.connector import MySQLConnection
 import insert
 from python_mysql_dbconfig import read_db_config
 
-
 def new_order():
     newOrderForm = Tk()
     newOrderForm.title('Новый заказ')

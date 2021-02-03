@@ -3,7 +3,8 @@ from python_mysql_dbconfig import read_db_config
 from tkinter import messagebox
 import tkinter
 
-def insert_truck(truckmodel, power, gosnumber, cost):
+
+def insert_truck(truckmodel, power, gosnumber, cost, photo_file):
     if truckmodel == "":
         messagebox.showerror('Ошибка', 'Отсутствуют необходимые параметры.\nЗаполните все поля формы и попробуйте снова')
         return 0
@@ -20,8 +21,9 @@ def insert_truck(truckmodel, power, gosnumber, cost):
                              'Отсутствуют необходимые параметры.\nЗаполните все поля формы и попробуйте снова')
         return 0
     else:
-        query = "INSERT INTO trucks(truckmodel,power,gosnumber,cost) VALUES(%s,%s,%s,%s)"
-        args = (truckmodel, power, gosnumber, cost)
+        photo_file="photos/"+photo_file
+        query = "INSERT INTO trucks(truckmodel,power,gosnumber,cost,truckphoto) VALUES(%s,%s,%s,%s,%s)"
+        args = (truckmodel, power, gosnumber, cost,photo_file)
 
         try:
             db_config = read_db_config()

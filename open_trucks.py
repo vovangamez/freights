@@ -4,6 +4,7 @@ from mysql.connector import MySQLConnection, Error
 from python_mysql_dbconfig import read_db_config
 import New_Truck
 from tkinter import messagebox
+from PIL import ImageTk, Image
 
 def delete(ID,window):
     try:
@@ -64,7 +65,10 @@ def open_trucks():
     for ro in trucks:
         tree.insert('',i, text="", values = (ro[0], ro[1], ro[2], ro[3], ro[4]))
         i=i+1
+    tree.bind("<<TreeviewSelect>>",lambda e:show_photo(e, tree, canvas))
     tree.grid(row=1, column = 0)
+    canvas = tk.Canvas(window, width=200, height=160)
+    canvas.grid(row=1, column=1)
     frame = tk.Frame(window)
     frame.grid(row=2, column=0)
     AddButton = tk.Button(frame, text='Добавить грузовик', command=New_Truck.new_truck)
@@ -74,3 +78,22 @@ def open_trucks():
     cursor.close()
     conn.close()
 
+def show_photo(event,tree,canvas):
+    for selection in tree.selection():
+        IDd=tree.item(selection)
+        break
+    IDs=IDd.get('values')
+    ID=IDs[0]
+    query="select truckphoto from trucks where idtruck=%s"
+    args=(ID,)
+    db_config = read_db_config()
+    conn = MySQLConnection(**db_config)
+    cursor = conn.cursor()
+    cursor.execute(query, args)
+    photopath=cursor.fetchone()
+    photopath=photopath[0]
+    photopath=photopath.decode('utf-8')
+    print(photopath)
+    PilImage = Image.open(photopath)
+    image1 = ImageTk.PhotoImage(PilImage)
+    imageSprite = canvas.create_image(400, 400, image=image1)
